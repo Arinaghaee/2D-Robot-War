@@ -17,7 +17,7 @@ Robot {
     public:
     string Name;
     void GetRobotName() { cout << "Geekname is:" << Name; }
-    void SetRobotName(string name) {Name = name; }
+    void SetRobotName(string name) {this->Name = name; }
     void move(){}
 
 };
@@ -76,7 +76,6 @@ class RoboTank: public Shooting{
 class UltimateRobot: public Shooting , public Moving , public Steping, public Seeing{
 
 };
-
 
 int main() {
 
