@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <list>
 
 using namespace std;
 
@@ -84,6 +85,7 @@ int buildList(Node** head, int row, int column){
 
 void printBoard(Node* head){
     string board = "";
+    cout << endl;
     while (head != nullptr) {
         // Check if the current node's data matches the target value
         bool nextRow = false;
@@ -106,6 +108,7 @@ void printBoard(Node* head){
         head = head->next;
     }
 
+
 }
 
 bool setLinkedList(Node* head, int x, int y) {
@@ -124,22 +127,174 @@ bool setLinkedList(Node* head, int x, int y) {
     return false;  // Value not found
 };
 
+bool resetLinkedList(Node* head, int x, int y) {
+    // Traverse the Linked List
+    while (head != nullptr) {
+        // Check if the current node's data matches the target value
+        if (head->cordinate.x == x && head->cordinate.y == y) {
+            head->occupied = false;
+            head->occupyBy = "";
+            return true;  // Value found
+        }
+        // Move to the next node
+        head = head->next;
+    }
+    
+    return false;  // Value not found
+};
 
 
-int start(Node** head, int steps,  Cordinate startCordinate){
-    cout << startCordinate.x << startCordinate.y << endl;
+
+
+
+int move(Node* head, Cordinate startCordinate){
+    const char* direction[8] = {"upLeft", "up", "upRight", "left", "right", "downLeft", "down", "rightDown"};
+    int xtemp = startCordinate.x;
+    int ytemp = startCordinate.y;
+    for(int i = 0; i < 8; i++)
+    {resetLinkedList(head, xtemp, ytemp);
+        if(strcmp(direction[i], "upLeft") == 0){
+            xtemp  = xtemp - 1;
+            ytemp  = ytemp + 1;
+        }else if(strcmp(direction[i], "up") == 0){
+            xtemp  = xtemp;
+            ytemp  = ytemp + 1;
+        }else if(strcmp(direction[i], "upRight") == 0){
+            xtemp  = xtemp + 1;
+            ytemp  = ytemp + 1;
+        }else if(strcmp(direction[i], "left") == 0){
+            xtemp  = xtemp - 1;
+            ytemp  = ytemp;
+        }else if(strcmp(direction[i], "right") == 0){
+            xtemp  = xtemp + 1;
+            ytemp  = ytemp;
+        }else if(strcmp(direction[i], "downLeft") == 0){
+            xtemp  = xtemp -1;
+            ytemp  = ytemp -1;
+        }else if(strcmp(direction[i], "down") == 0){
+            xtemp  = xtemp;
+            ytemp  = ytemp -1;
+        }else if(strcmp(direction[i], "rightDown") == 0){
+            xtemp  = xtemp + 1;
+            ytemp  = ytemp - 1;
+        }
+        setLinkedList(head, xtemp, ytemp);
+        cout << direction[i] << endl;
+        printBoard(head);
+    }
+return 1;
+}
+
+class Robot {
+    public:
+    string Name;
+    Cordinate cordinate;
+    string RobotType;
+    void GetRobotType() { cout << "Geekname is:" << RobotType; }
+    void SetRobotType(string robotType) {RobotType = robotType; }
+
+};
+
+class Moving:public 
+Robot {
+    public:
+    // void GetRobotName() { cout << "Geekname is:" << Name; }
+    // void SetRobotName(string name) {this->Name = name; }
+    // void move(){}
+
+};
+
+class Seeing 
+ {
+    public:
+    // void GetRobotName() { cout << "Geekname is:" << Name; }
+    // void SetRobotName(string name) {Name = name; }
+    // void look(){}
+};
+
+class Shooting 
+ {
+    // public:
+    // void GetRobotName() { cout << "Geekname is:" << Name; }
+    // void SetRobotName(string name) {Name = name; }
+    // void Shoot(){}
+};
+
+class Steping 
+ {
+    // public:
+    // void GetRobotName() { cout << "Geekname is:" << Name; }
+    // void SetRobotName(string name) {Name = name; }
+    // void Stomp(){}
+};
+
+class RoboCop: public Shooting , public Seeing , public Moving{
+    public:
+    RoboCop(string name, Cordinate cordinate) {     // Constructor
+      this->Name      = name;
+      this->cordinate = cordinate;
+    }
+
+};
+
+class Terminator: public Seeing , public Moving , public Steping{
+    public:
+    Terminator(string name, Cordinate cordinate) {     // Constructor
+      this->Name      = name;
+      this->cordinate = cordinate;
+    }
+
+};
+
+class TerminatorRobocop: public Seeing , public Moving , public Steping , public Shooting{
+
+};
+
+class BlueThunder: public Shooting{
+
+};
+
+class MadBot: public Shooting{
+
+};
+
+class RoboTank: public Shooting{
+
+};
+
+class UltimateRobot: public Shooting , public Moving , public Steping, public Seeing{
+
+};
+
+
+int start(Node* head, int steps,  Robot robotlist[3]){
+    for(int i = 0; i< 3; i++){
+        cout << robotlist[i].cordinate.x << robotlist[i].cordinate.y << endl;
+        setLinkedList(head, robotlist[i].cordinate.x, robotlist[i].cordinate.y);
+    }
+    for(int i = 0; i< steps; i++){
+        cout << "step "<< i+1 <<endl;
+    }
 
  return 1;
 }
 
 int main(){
     Node* head = NULL;
-    int steps = 20;
+    int steps = 10;
     struct Cordinate s;
   	s.x = 2;
 	s.y = 2;
 
-    buildList(&head, 3,3);
+    struct Cordinate s2;
+  	s2.x = 5;
+	s2.y = 5;
+
+    struct Cordinate s3;
+  	s3.x = 7;
+	s3.y = 7;
+
+    buildList(&head, 9,9);
     // queue<int> gquiz;
     // gquiz.push(10);
     // gquiz.push(20);
@@ -147,11 +302,29 @@ int main(){
     // cout << sizeList(head)<<endl;
     // printBoard(head, 3,3);
     // searchLinkedList(head, 1,1);
-    // start(&head, steps, s);
-    setLinkedList(head, 2,2);
-    printBoard(head); cout << endl;
-    setLinkedList(head, 3,3);
+    RoboCop r1("sharaf", s );
+    RoboCop r2("zan-e sharaf", s2 );
+    Terminator r3("bach-e sharaf", s3 );
+    Robot rlist[3];
+    rlist[0]= r1;
+    rlist[1]= r2;
+    rlist[2]= r3;
+    start(head, steps, rlist);
+    // setLinkedList(head, 2,2);
     printBoard(head);
+    // move(head, s);
+
+    // move(1, 2);    
+    //  Moving newRobot1;
+
+    // cout << newRobot1.RobotType+ " check type first time \n";
+    // newRobot1.SetRobotType("Type 1");
+    // cout << newRobot1.RobotType+ " check type second time \n";
+
+    // cout << newRobot1.Name+ " check name first time \n";
+    // newRobot1.SetRobotName("Behnaz");
+    // cout << newRobot1.Name+ " check name second time \n";
+
 
 
     return 0;
